@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_category")
@@ -18,20 +19,10 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
-/*
-   private List<Product> products;
-*/
+    private Set<Product> products = new HashSet<>();
 
     public Category() {
     }
-
-/*
-    public Category(Long id, String name, List<Product> products) {
-        this.id = id;
-        this.name = name;
-        this.products = products;
-    }
-*/
 
     public Category(Long id, String name) {
         this.id = id;
@@ -54,11 +45,9 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-/*
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
-*/
 
     @Override
     public boolean equals(Object o) {
