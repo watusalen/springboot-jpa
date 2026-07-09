@@ -2,6 +2,7 @@ package com.matusalenalves.course.services;
 
 import com.matusalenalves.course.entities.User;
 import com.matusalenalves.course.repositories.UserRepository;
+import com.matusalenalves.course.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class UserService {
 
     public User findById(Long id){
         Optional<User> user = userRepository.findById(id);
-        return user.isPresent() ? user.get() : null;
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User user){
