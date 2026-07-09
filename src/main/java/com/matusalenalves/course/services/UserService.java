@@ -4,6 +4,7 @@ import com.matusalenalves.course.entities.User;
 import com.matusalenalves.course.repositories.UserRepository;
 import com.matusalenalves.course.services.exceptions.DataBaseException;
 import com.matusalenalves.course.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -33,15 +34,19 @@ public class UserService {
         userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         try {
             userRepository.deleteById(id);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DataBaseException(e.getMessage());
         }
     }
 
     public User update(Long id, User user) {
-        User entity = userRepository.getReferenceById(id);
-        updateData(entity, user);
-        return userRepository.save(entity);
+        try {
+            User entity = userRepository.getReferenceById(id);
+            updateData(entity, user);
+            return userRepository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User user) {
